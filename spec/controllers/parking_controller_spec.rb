@@ -79,4 +79,39 @@ describe V1::ParkingController, type: :request do
       end
     end
   end
+
+  describe 'PUT /v1/parking/:id/out' do
+    context 'successfully' do
+      let!(:parking) { Parking.create(plate: 'ABC-1234', entry_time: DateTime.now, paid: true) }
+      let(:expected_response) { { message: "ABC-1234 left parking" } }
+
+      it 'update parking exit time' do
+        put "/v1/parking/#{parking.id}/out"
+
+        expect(response.status).to eq(200)
+        expect(response.body).to eq(expected_response.to_json)
+        expect(Parking.last.exit_time).to be_present
+      end
+    end
+
+    context 'parking not found' do
+      it 'show error message' do
+        put '/v1/parking/999/out'
+
+        expect(response.status).to eq(404)
+        expect(response.body).to include("Couldn't find Parking with 'id'=999")
+      end
+    end
+
+    context 'parking not payed' do
+      let!(:parking) { Parking.create(plate: 'ABC-1234', entry_time: DateTime.now) }
+
+      it 'show error message' do
+        put "/v1/parking/#{parking.id}/out"
+
+        expect(response.status).to eq(409)
+        expect(response.body).to eq("Validation failed: Exit time can't leave without paying")
+      end
+    end
+  end
 end

@@ -19,6 +19,16 @@ class V1::ParkingController < ApplicationController
     render json: e.message, status: :conflict
   end
 
+  def leave
+    parking = ParkingService::Leave.new(parking_leave_params).call
+
+    render json: { message: "#{parking.plate} left parking" }, status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    render json: e.message, status: :not_found
+  rescue ActiveRecord::RecordInvalid => e
+    render json: e.message, status: :conflict
+  end
+
   private
 
   def parking_params
@@ -26,6 +36,10 @@ class V1::ParkingController < ApplicationController
   end
 
   def parking_payment_params
+    params.permit(:id)
+  end
+
+  def parking_leave_params
     params.permit(:id)
   end
 
