@@ -2,12 +2,11 @@
 class V1::ParkingController < ApplicationController
   def create
     begin
-      plate = parking_params[:plate]
-      parking = Parking.new(plate: plate, entry_time: DateTime.now)
-      parking.save!
-      render json: parking.as_json(only: [ :id, :plate ]), status: :created
-    rescue ActiveRecord::RecordInvalid
-      render json: parking.errors, status: :unprocessable_entity
+      parking = ParkingService::Creator.new(parking_params).call
+
+      render json: parking_json(parking), status: :created
+    rescue ActiveRecord::RecordInvalid => e
+      render json: e.message, status: :unprocessable_entity
     end
   end
 
@@ -15,5 +14,9 @@ class V1::ParkingController < ApplicationController
 
   def parking_params
     params.permit(:plate)
+  end
+
+  def parking_json(parking)
+    parking.as_json(only: [ :id, :plate ])
   end
 end
