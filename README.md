@@ -66,3 +66,19 @@ rspec
 { Validation failed: "Plate is invalid" }
 ```
 
+* **PUT /v1/parking/:id/pay**: Make parking payment.
+
+200
+```json
+{ message: "parking payed for ABC-1234" }
+```
+
+404
+```json
+{ "Couldn't find Parking with 'id'=999" }
+```
+
+422
+```json
+{ Validation failed: "Paid can't be processed again" }
+```
