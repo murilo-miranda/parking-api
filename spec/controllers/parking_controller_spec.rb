@@ -44,4 +44,39 @@ describe V1::ParkingController, type: :request do
       end
     end
   end
+
+  describe 'PUT /v1/parking/:id/pay' do
+    context 'successfully' do
+      let!(:parking) { Parking.create(plate: 'ABC-1234', entry_time: DateTime.now) }
+      let(:expected_response) { { message: "parking payed for ABC-1234" } }
+
+      it 'update payment status' do
+        put "/v1/parking/#{parking.id}/pay"
+
+        expect(response.status).to eq(200)
+        expect(response.body).to eq(expected_response.to_json)
+        expect(Parking.last.paid).to eq(true)
+      end
+    end
+
+    context 'parking not found' do
+      it 'show error message' do
+        put '/v1/parking/999/pay'
+
+        expect(response.status).to eq(404)
+        expect(response.body).to include("Couldn't find Parking with 'id'=999")
+      end
+    end
+
+    context 'parking already payed' do
+      let!(:parking) { Parking.create(plate: 'ABC-1234', entry_time: DateTime.now, paid: true) }
+
+      it 'show error message' do
+        put "/v1/parking/#{parking.id}/pay"
+
+        expect(response.status).to eq(409)
+        expect(response.body).to eq("Validation failed: Paid can't be processed again")
+      end
+    end
+  end
 end
