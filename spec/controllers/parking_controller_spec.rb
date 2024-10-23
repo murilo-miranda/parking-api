@@ -110,7 +110,7 @@ describe V1::ParkingController, type: :request do
         put "/v1/parking/#{parking.id}/out"
 
         expect(response.status).to eq(409)
-        expect(response.body).to eq("Validation failed: Exit time can't leave without paying")
+        expect(response.body).to eq("Validation failed: Left unauthorized without paying")
       end
     end
   end

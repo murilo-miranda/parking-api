@@ -10,6 +10,7 @@ describe ParkingService::Leave do
 
       it 'update parking exit time' do
         expect { subject }.to change { Parking.last.exit_time }.from(nil).to(within(1.minute).of(DateTime.now))
+        expect(Parking.last.left).to eq(true)
       end
     end
 
@@ -28,6 +29,8 @@ describe ParkingService::Leave do
 
       it 'raise error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+        expect(Parking.last.left).to eq(false)
+        expect(Parking.last.exit_time).to be_nil
       end
     end
   end

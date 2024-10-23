@@ -5,7 +5,7 @@ class ParkingService::Leave
 
   def call
     parking = Parking.find(@id)
-    parking.update!(exit_time: DateTime.now)
+    parking.update!(left: true, exit_time: DateTime.now)
     parking
   end
 end
