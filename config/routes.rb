@@ -10,5 +10,6 @@ Rails.application.routes.draw do
 
   namespace :v1 do
     post "/parking", to: "parking#create"
+    put "/parking/:id/pay", to: "parking#pay"
   end
 end

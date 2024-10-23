@@ -1,4 +1,3 @@
-# create parking service creator
 class ParkingService::Creator
   def initialize(parking_params)
     @plate = parking_params[:plate]
