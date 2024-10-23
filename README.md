@@ -1,24 +1,68 @@
-# README
+# menu-api
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The project provides a RESTful API for manage parking.
 
-Things you may want to cover:
+## Table of Contents
 
-* Ruby version
+- [Run project](#run_project)
+- [API](#api)
+- [Test](#test)
 
-* System dependencies
 
-* Configuration
+## Run project
+To run the project you need the following:
 
-* Database creation
+- Docker && Docker Compose
 
-* Database initialization
+1. Clone the repository:
 
-* How to run the test suite
+```
+git clone https://github.com/murilo-miranda/parking-api.git
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+2. Create .env file in root with content:
 
-* Deployment instructions
+```
+DB_HOST=parking-db
+POSTGRES_USER=parking-api
+POSTGRES_PASSWORD=parking-api123
+```
 
-* ...
+3. Run docker:
+
+```
+docker compose up
+```
+
+## Test
+
+Run the command:
+
+```
+rspec
+```
+
+## API
+
+* **POST /v1/parking**: Creates new data.
+
+201
+```json
+{ id: Parking.last.id, plate: 'ABC-1234' }
+```
+
+422
+```json
+{ Validation failed: "Plate can't be blank" }
+```
+
+422
+```json
+{ Validation failed: "Plate is the wrong length (should be 8 characters)" }
+```
+
+422
+```json
+{ Validation failed: "Plate is invalid" }
+```
+
