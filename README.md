@@ -82,3 +82,20 @@ rspec
 ```json
 { Validation failed: "Paid can't be processed again" }
 ```
+
+* **PUT /v1/parking/:id/out**: Left parking.
+
+200
+```json
+{ message: "ABC-1234 left parking" }
+```
+
+404
+```json
+{ "Couldn't find Parking with 'id'=999" }
+```
+
+422
+```json
+{ Validation failed: Left unauthorized without paying" }
+```
