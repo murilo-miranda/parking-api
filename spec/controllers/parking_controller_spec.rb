@@ -91,6 +91,7 @@ describe V1::ParkingController, type: :request do
         expect(response.status).to eq(200)
         expect(response.body).to eq(expected_response.to_json)
         expect(Parking.last.exit_time).to be_present
+        expect(Parking.last.left).to eq(true)
       end
     end
 

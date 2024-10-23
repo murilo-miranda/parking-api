@@ -1,6 +1,6 @@
 class ParkingService::Leave
-  def initialize(parking_payment_params)
-    @id = parking_payment_params[:id]
+  def initialize(parking_leave_params)
+    @id = parking_leave_params[:id]
   end
 
   def call
