@@ -29,6 +29,16 @@ class V1::ParkingController < ApplicationController
     render json: e.message, status: :conflict
   end
 
+  def history
+    parking_history = ParkingHistoryPresenter.by_plate(parking_params)
+
+    if parking_history.empty?
+      render json: { message: "Couldnt find Parking history for plate: #{parking_params[:plate]}" }, status: :not_found
+    else
+      render json: parking_history, status: :ok
+    end
+  end
+
   private
 
   def parking_params
