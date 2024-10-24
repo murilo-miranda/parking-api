@@ -1,4 +1,4 @@
-# menu-api
+# parking-api
 
 The project provides a RESTful API for manage parking.
 
