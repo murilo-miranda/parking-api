@@ -29,6 +29,12 @@ class V1::ParkingController < ApplicationController
     render json: e.message, status: :conflict
   end
 
+  def history
+    render json: ParkingHistoryPresenter.by_plate(parking_params), status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    render json: e.message, status: :not_found
+  end
+
   private
 
   def parking_params
