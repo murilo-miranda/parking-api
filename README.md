@@ -99,3 +99,19 @@ rspec
 ```json
 { Validation failed: Left unauthorized without paying" }
 ```
+
+* **GET /v1/parking/:plate**: History of parking.
+
+200
+```json
+[
+  { id: 1, time: "60 minutes", paid: true, left: true },
+  { id: 2, time: "300 minutes", paid: true, left: false },
+  { id: 3, time: "180 minutes", paid: false, left: false }
+]
+```
+
+404
+```json
+{ "Couldnt find Parking history for plate: Invalid" }
+```
