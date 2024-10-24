@@ -115,4 +115,36 @@ describe V1::ParkingController, type: :request do
       end
     end
   end
+
+  describe 'GET /v1/parking/:plate' do
+    context 'with valid plate' do
+      let(:plate) { 'ABC-1234' }
+      let!(:parking1) { Parking.create(plate: plate, entry_time: 1.hour.ago, exit_time: DateTime.now) }
+      let!(:parking2) { Parking.create(plate: plate, entry_time: 5.hour.ago, exit_time: DateTime.now) }
+      let!(:parking3) { Parking.create(plate: plate, entry_time: 3.hour.ago, exit_time: nil) }
+      let(:expected_response) {
+        [
+          { id: parking1.id, time: "60 minutes", paid: parking1.paid, left: parking1.left },
+          { id: parking2.id, time: "300 minutes", paid: parking2.paid, left: parking2.left },
+          { id: parking3.id, time: "180 minutes", paid: parking3.paid, left: parking3.left }
+        ]
+      }
+
+      it 'returns a list of parking history for the given plate' do
+        get "/v1/parking/#{plate}"
+
+        expect(response.status).to eq(200)
+        expect(response.body).to eq(expected_response.to_json)
+      end
+    end
+
+    context 'with invalid plate' do
+      it 'show error message' do
+        get '/v1/parking/Invalid'
+
+        expect(response.status).to eq(404)
+        expect(response.body).to include("Couldnt find Parking history for plate: Invalid")
+      end
+    end
+  end
 end

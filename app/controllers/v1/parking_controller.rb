@@ -30,9 +30,13 @@ class V1::ParkingController < ApplicationController
   end
 
   def history
-    render json: ParkingHistoryPresenter.by_plate(parking_params), status: :ok
-  rescue ActiveRecord::RecordNotFound => e
-    render json: e.message, status: :not_found
+    parking_history = ParkingHistoryPresenter.by_plate(parking_params)
+
+    if parking_history.empty?
+      render json: { message: "Couldnt find Parking history for plate: #{parking_params[:plate]}" }, status: :not_found
+    else
+      render json: parking_history, status: :ok
+    end
   end
 
   private
