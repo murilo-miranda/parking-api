@@ -136,6 +136,18 @@ describe V1::ParkingController, type: :request do
         expect(response.status).to eq(200)
         expect(response.body).to eq(expected_response.to_json)
       end
+
+      context 'have other plate record' do
+        let(:other_plate) { 'DEF-1234' }
+        let!(:parking4) { Parking.create(plate: other_plate, entry_time: 3.hour.ago) }
+
+        it 'the return list should have only the given plate' do
+          get "/v1/parking/#{plate}"
+
+          expect(response.status).to eq(200)
+          expect(response.body).to eq(expected_response.to_json)
+        end
+      end
     end
 
     context 'with invalid plate' do
